@@ -1,66 +1,72 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-Vue.use(Router)
+import Vue from "vue";
+import Router from "vue-router";
+Vue.use(Router);
 
-import CoreMembers from './pages/core-members.vue'
-import Results from './pages/results.vue'
-import AdminCandidates from './pages/admin-candidates.vue'
-import AdminVoters from './pages/admin-voters.vue'
-import AdminWinners from './pages/admin-winners.vue'
-import login from './pages/login.vue'
-import register from './pages/register.vue'
-import verify from './pages/verify.vue'
-import AdminRoles from './pages/admin-roles.vue'
+import CoreMembers from "./pages/core-members.vue";
+import Results from "./pages/results.vue";
+import AdminCandidates from "./pages/admin-candidates.vue";
+import AdminVoters from "./pages/admin-voters.vue";
+import AdminWinners from "./pages/admin-winners.vue";
+import login from "./pages/login.vue";
+import register from "./pages/register.vue";
+import verify from "./pages/verify.vue";
+import AdminRoles from "./pages/admin-roles.vue";
+import AspiringPositions from "./pages/aspiring-positions.vue";
 
 const routes = [
     {
-        path:  '/admin-roles',
+        path: "/admin-roles",
         component: AdminRoles,
-        name: 'AdminRoles'
+        name: "AdminRoles"
     },
     {
-        path:  '/login',
+        path: "/login",
         component: login,
-        name: 'login'
+        name: "login"
     },
     {
-        path:  '/verify',
+        path: "/verify",
         component: verify,
-        name: 'verify'
+        name: "verify"
     },
     {
-        path:  '/register',
+        path: "/register",
         component: register,
-        name: 'register'
+        name: "register"
     },
     {
-        path:  '/admin-winners',
+        path: "/admin-winners",
         component: AdminWinners,
-        name: 'AdminWinners'
+        name: "AdminWinners"
     },
     {
-        path:  '/admin-voters',
+        path: "/admin-voters",
         component: AdminVoters,
-        name: 'AdminVoters'
+        name: "AdminVoters"
     },
     {
-        path:  '/core-members',
+        path: "/core-members",
         component: CoreMembers,
-        name: 'CoreMembers'
+        name: "CoreMembers"
     },
     {
-        path:  '/results',
+        path: "/results",
         component: Results,
-        name: 'Results'
+        name: "Results"
     },
     {
-        path:  '/admin-candidates',
+        path: "/admin-candidates",
         component: AdminCandidates,
-        name: 'AdminCandidates'
+        name: "AdminCandidates"
     },
-]
+    {
+        path: "/aspiring-positions",
+        component: AspiringPositions,
+        name: "AspiringPositions"
+    }
+];
 
-export default new Router ({
-    mode: 'history',
-    routes,
-})
+export default new Router({
+    mode: "history",
+    routes
+});

@@ -16,19 +16,21 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::prefix('app')->group(function(){
+Route::prefix('app')->group(function () {
+    Route::post('/delete_position', [AdminController::class, 'deletePosition']);
+    Route::post('/edit_position', [AdminController::class, 'editPosition']);
+    Route::post('/create_position', [AdminController::class, 'createPosition']);
+    Route::get('/get_positions', [AdminController::class, 'getPositions']);
     Route::post('/create_role/{roleName}', [AdminController::class, 'createRole']);
     Route::get('/get_roles', [AdminController::class, 'getRoles']);
     Route::get('/get_users', [AdminController::class, 'getUsers']);
     Route::post('/create_user', [AuthController::class, 'createUser']);
-    Route::post('/verify/{phone}/{verification_code}', [AuthController::class, 'verify']) ;
-    Route::post('/request_code/{phone}', [AuthController::class, 'requestCode']) ;
-    Route::post('/login', [AuthController::class, 'login']) ;
+    Route::post('/verify/{phone}/{verification_code}', [AuthController::class, 'verify']);
+    Route::post('/request_code/{phone}', [AuthController::class, 'requestCode']);
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
-Route::get('/logout',[AuthController::class, 'logout']);
+Route::get('/logout', [AuthController::class, 'logout']);
 
-Route::get('/',[HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index']);
 Route::any('{slug}', [HomeController::class, 'index'])->where('slug', '([A-z\d\-\/_.]+)?');
-
-
