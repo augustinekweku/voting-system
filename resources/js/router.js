@@ -12,6 +12,7 @@ import register from "./pages/register.vue";
 import verify from "./pages/verify.vue";
 import AdminRoles from "./pages/admin-roles.vue";
 import AspiringPositions from "./pages/aspiring-positions.vue";
+import Parties from "./pages/admin-parties.vue";
 
 const routes = [
     {
@@ -63,6 +64,11 @@ const routes = [
         path: "/aspiring-positions",
         component: AspiringPositions,
         name: "AspiringPositions"
+    },
+    {
+        path: "/parties",
+        component: Parties,
+        name: "Parties"
     }
 ];
 

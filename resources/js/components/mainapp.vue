@@ -106,6 +106,9 @@
                                         <b-dropdown-item to="/admin-roles"
                                             >Roles</b-dropdown-item
                                         >
+                                        <b-dropdown-item to="/parties"
+                                            >Political Parties</b-dropdown-item
+                                        >
                                     </div>
                                 </b-nav-item-dropdown>
                             </b-nav>

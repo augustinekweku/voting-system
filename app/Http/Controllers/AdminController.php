@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aspiring_position;
+use App\Models\Party;
 use App\Models\Role;
 use App\Models\User;
 use Twilio\Http\Client;
@@ -35,6 +36,10 @@ class AdminController extends Controller
 
     public function createPosition(Request $request)
     {
+        //validate request
+        $this->validate($request, [
+            'position_name' => 'unique:aspiring_positions'
+        ]);
         $aspiring_position = Aspiring_position::create([
             'position_name' => $request->position_name
         ]);
@@ -59,5 +64,43 @@ class AdminController extends Controller
             'id' => 'required'
         ]);
         return Aspiring_position::where('id', $request->id)->delete();
+    }
+    public function createParty(Request $request)
+    {
+        //validate request
+        $this->validate($request, [
+            'party_name' => 'unique:parties'
+        ]);
+        $party = Party::create([
+            'party_name' => $request->party_name,
+            'motto' => $request->motto
+        ]);
+        return $party;
+    }
+    public function getParties()
+    {
+        return Party::orderBy('id', 'desc')->get();
+    }
+
+    public function editParty(Request $request)
+    {
+        //validate request
+        $this->validate($request, [
+            'party_name' => 'required',
+            'motto' => 'required'
+        ]);
+        return Party::where('id', $request->id)->update([
+            'party_name' => $request->party_name,
+            'motto' => $request->motto,
+        ]);
+    }
+
+    public function deleteParty(Request $request)
+    {
+        //validate request
+        $this->validate($request, [
+            'id' => 'required'
+        ]);
+        return Party::where('id', $request->id)->delete();
     }
 }

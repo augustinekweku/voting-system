@@ -17,6 +17,10 @@ use App\Http\Controllers\AdminController;
 */
 
 Route::prefix('app')->group(function () {
+    Route::post('/delete_party', [AdminController::class, 'deleteParty']);
+    Route::post('/edit_party', [AdminController::class, 'editParty']);
+    Route::post('/create_party', [AdminController::class, 'createParty']);
+    Route::get('/get_parties', [AdminController::class, 'getParties']);
     Route::post('/delete_position', [AdminController::class, 'deletePosition']);
     Route::post('/edit_position', [AdminController::class, 'editPosition']);
     Route::post('/create_position', [AdminController::class, 'createPosition']);
