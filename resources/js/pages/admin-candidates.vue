@@ -16,6 +16,24 @@
                     <div>
                         <form>
                             <div class="form-group">
+                                <label for="profileImage">Profile Image</label>
+                                <vue-upload-multiple-image
+                                    @upload-success="uploadImageSuccess"
+                                    @before-remove="beforeRemove"
+                                    @edit-image="editImage"
+                                    :data-images="images"
+                                    idUpload="myIdUpload"
+                                    editUpload="myIdEdit"
+                                    popupText="default image"
+                                    dragText="Drag Image and drop here"
+                                    browseText="Browse"
+                                    primaryText="File added"
+                                    markIsPrimaryText="Set as default image"
+                                    dropText="Drop file"
+                                    :multiple="false"
+                                ></vue-upload-multiple-image>
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputEmail1"
                                     >First Name</label
                                 >
@@ -89,7 +107,7 @@
                                         class="mt-3"
                                         size="sm"
                                         variant="success"
-                                        @click="editPosition"
+                                        @click="handleSubmit"
                                         >Edit</b-button
                                     >
                                 </div>
@@ -98,7 +116,6 @@
                                         class="mt-3"
                                         size="sm"
                                         variant="danger"
-                                        @click="deletePosition"
                                         >Delete</b-button
                                     >
                                 </div>
@@ -116,8 +133,19 @@
 </template>
 
 <script>
+import VueUploadMultipleImage from "vue-upload-multiple-image";
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL
+} from "firebase/storage";
+import app from "../firebase";
 export default {
     name: "my-component",
+    components: {
+        VueUploadMultipleImage
+    },
     data() {
         return {
             columns: [
@@ -188,12 +216,113 @@ export default {
                 }
             ],
             positions: [],
-            parties: []
+            parties: [],
+            images: []
         };
     },
     methods: {
-        async handleSubmit() {
-            console.log("object");
+        beforeRemove(index, done, fileList) {
+            console.log("index", index, fileList);
+            var r = confirm("remove image");
+            if (r == true) {
+                done();
+            } else {
+            }
+        },
+        editImage(formData, index, fileList) {
+            console.log("edit data", formData, index, fileList);
+        },
+        uploadImageSuccess(formData, index, fileList) {
+            this.images = fileList;
+            const fileName = new Date().getTime() + this.images[0].name;
+            console.log(fileList);
+            const storage = getStorage(app);
+            const storageRef = ref(storage, fileName);
+            const uploadTask = uploadBytesResumable(storageRef, formData);
+
+            // Register three observers:
+            // 1. 'state_changed' observer, called any time the state changes
+            // 2. Error observer, called on failure
+            // 3. Completion observer, called on successful completion
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log("Upload is " + progress + "% done");
+                    switch (snapshot.state) {
+                        case "paused":
+                            console.log("Upload is paused");
+                            break;
+                        case "running":
+                            console.log("Upload is running");
+                            break;
+                        default:
+                    }
+                },
+                error => {
+                    // Handle unsuccessful uploads
+                },
+                () => {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    getDownloadURL(uploadTask.snapshot.ref).then(
+                        downloadURL => {
+                            console.log(
+                                "File is available at : " + downloadURL
+                            );
+                        }
+                    );
+                }
+            );
+        },
+        handleSubmit(e) {
+            const fileName = new Date().getTime() + this.images[0].name;
+            console.log(JSON.stringify(this.images[0]));
+            const file = JSON.stringify(this.images[0]);
+            const storage = getStorage(app);
+            const storageRef = ref(storage, fileName);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            // Register three observers:
+            // 1. 'state_changed' observer, called any time the state changes
+            // 2. Error observer, called on failure
+            // 3. Completion observer, called on successful completion
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log("Upload is " + progress + "% done");
+                    switch (snapshot.state) {
+                        case "paused":
+                            console.log("Upload is paused");
+                            break;
+                        case "running":
+                            console.log("Upload is running");
+                            break;
+                        default:
+                    }
+                },
+                error => {
+                    // Handle unsuccessful uploads
+                },
+                () => {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    getDownloadURL(uploadTask.snapshot.ref).then(
+                        downloadURL => {
+                            console.log(
+                                "File is available at : " + downloadURL
+                            );
+                        }
+                    );
+                }
+            );
         },
         async getPositions() {
             const res = await this.callApi("get", "app/get_positions");
